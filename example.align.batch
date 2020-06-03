@@ -1,0 +1,13 @@
+#!/bin/bash
+#BSUB -J example.align
+#BSUB -o log/example.align.out
+#BSUB -e log/example.align.error
+#BSUB -q normal
+#BSUB -n 8,32
+#BSUB -M 64400
+
+source activate py27_yl
+
+bowtie2 -p $LSB_DJOB_NUMPROC --end-to-end --very-sensitive -x raw_data/combinations -U trim/example.fastq.gz -S alignment/example.sam
+samtools view -h -bS -F 4 alignment/example.sam > alignment/example.bam
+rm alignment/example.sam
